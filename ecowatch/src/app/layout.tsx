@@ -24,9 +24,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <head>
+        <script src="https://unpkg.com/three@0.150.1/build/three.min.js" />
+        <script src="https://unpkg.com/globe.gl@2.30.0/dist/globe.gl.min.js" />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>

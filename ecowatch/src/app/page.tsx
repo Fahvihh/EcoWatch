@@ -1,58 +1,79 @@
-import axios from "axios";
 
-async function fetchPosts(): Promise<any> {
-  const nasaApiKey = 'https://api.meteomatics.com/2025-10-04T00:00:00Z--2025-10-07T00:00:00Z:PT1H/t_2m:C/52.520551,13.461804/json';
-  
-  const response = await axios.get(nasaApiKey, {
-    auth: {
-      username: 'jnior_jos',
-      password: 'M4PGX0wo8751BiXXBxlo'
-    }
-  });
-  return response.data;
-}
 
-export default async function Home() {
-  const posts = await fetchPosts();
-  const coordinates = posts.data[0].coordinates[0]; 
-  const dates = coordinates.dates;
-  console.log(dates);
+"use client";
+import "./assets/css/styles.css";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import { fetchNasaData, NasaData } from "./utils/nasaApi";
+import { fetchMeteomaticsData, MeteomaticsData } from "./utils/meteomaticsApi";
+import ClimateModal from "./components/ClimateModal";
+const GlobeBrazil = dynamic(() => import("./components/GlobeBrazil"), { ssr: false });
+export default function Home() {
+  const [nasaData, setNasaData] = useState<NasaData | null>(null);
+  const [meteoData, setMeteoData] = useState<MeteomaticsData | null>(null);
+  const [selectedRegion, setSelectedRegion] = useState<string>("Manaus");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalLat, setModalLat] = useState(-3.119);
+  const [modalLng, setModalLng] = useState(-60.212);
+
+  useEffect(() => {
+    fetchNasaData(-3.119, -60.212).then(setNasaData);
+    fetchMeteomaticsData(-3.119, -60.212).then(setMeteoData);
+  }, []);
+
+  function handleRegionClick(lat: number, lng: number, name: string) {
+    setSelectedRegion(name);
+    setModalLat(lat);
+    setModalLng(lng);
+    setModalOpen(true);
+    fetchMeteomaticsData(lat, lng).then(setMeteoData);
+  }
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-green-100 flex flex-col items-center justify-center px-4 py-8">
-      <div className="w-full max-w-2xl bg-white/80 rounded-2xl shadow-xl p-8 border border-gray-200">
-        <h1 className="text-4xl font-extrabold text-center text-green-700 mb-6 drop-shadow-lg">EcoWatch - Dados Meteomatics</h1>
-        <div className="flex flex-col md:flex-row md:justify-between gap-4 mb-8">
-          <div className="bg-blue-50 rounded-lg p-4 flex-1 text-center shadow">
-            <span className="block text-lg font-semibold text-gray-700">Latitude</span>
-            <span className="text-2xl font-bold text-blue-600">{coordinates.lat}</span>
-          </div>
-          <div className="bg-green-50 rounded-lg p-4 flex-1 text-center shadow">
-            <span className="block text-lg font-semibold text-gray-700">Longitude</span>
-            <span className="text-2xl font-bold text-green-600">{coordinates.lon}</span>
-          </div>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full table-auto border-collapse rounded-lg shadow">
-            <thead>
-              <tr className="bg-green-200 text-green-900">
-                <th className="px-4 py-2 text-left">Data</th>
-                <th className="px-4 py-2 text-left">Temperatura (°C)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dates.map((item: any, index: number) => (
-                <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50'}>
-                  <td className="px-4 py-2 font-mono text-gray-700">{item.date}</td>
-                  <td className="px-4 py-2 font-bold text-green-700">{item.value} °C</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <footer className="mt-8 text-gray-500 text-sm text-center">
-        Powered by Meteomatics & NASA | EcoWatch 2025
+  <div className="min-h-screen bg-cover bg-center" style={{backgroundColor: '#061826'}}>
+      
+
+      {/* Main Content */}
+  <main className="main-content" style={{marginTop: '40px'}}>
+        
+
+        <section className="right-column" style={{
+          minWidth: '900px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'relative',
+          height: '750px',
+          overflow: 'visible',
+        }}>
+          <GlobeBrazil onRegionClick={handleRegionClick} />
+          <ClimateModal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            lat={modalLat}
+            lng={modalLng}
+            regionName={selectedRegion}
+            meteoData={meteoData}
+          />
+      
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer style={{
+        textAlign: 'center',
+        padding: '25px',
+        background: 'rgba(10,50,80,0.95)',
+        fontSize: '1.1em',
+        color: '#2fffd6',
+        position: 'relative',
+        zIndex: 5,
+        borderTop: '2px solid #2fffd6',
+        marginTop: '40px',
+        letterSpacing: '1px',
+      }}>
+        <p>2025 NASA Space Apps Challenge</p>
       </footer>
-    </main>
+    </div>
   );
 }
