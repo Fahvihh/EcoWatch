@@ -35,10 +35,10 @@ export default function GlobeBrazil({ onRegionClick }: { onRegionClick?: (lat: n
 
       globe(globeRef.current);
       globe.onGlobeReady(() => {
-        globe.pointOfView({ lat: -14.2350, lng: -51.9253, altitude: 1.2 }, 0);
+        globe.pointOfView({ lat: -14.2350, lng: -51.9253, altitude: 3.0 }, 0);
       });
     }
   }, [onRegionClick]);
 
-  return <div id="globeViz" ref={globeRef} style={{ width: "100%", height: "100%" }} />;
+  return <div id="globeViz" ref={globeRef}  />;
 }

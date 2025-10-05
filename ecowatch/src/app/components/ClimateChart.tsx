@@ -4,12 +4,16 @@ import ReactECharts from "echarts-for-react";
 
 interface ClimateChartProps {
   dates: Array<{ date: string; value: number }>;
+  title: string;
+  unit: string;
+  style?: React.CSSProperties;
 }
 
-export default function ClimateChart({ dates }: ClimateChartProps) {
+// export default function ClimateChart({ dates }: ClimateChartProps) {
+export default function ClimateChart({ dates, title, unit, style }: ClimateChartProps) {
   const option = {
     title: {
-      text: 'Temperatura (°C)',
+      text: `${title} (${unit})`,
       left: 'center',
       textStyle: { color: '#2fffd6', fontSize: 18 }
     },
@@ -41,8 +45,8 @@ export default function ClimateChart({ dates }: ClimateChartProps) {
   };
 
   return (
-    <div style={{ margin: '24px 0' }}>
-      <ReactECharts option={option} style={{ height: 320, width: '100%' }} />
+    <div style={{ margin: '24px 0', height: '100%', width: '100%' }}>
+      <ReactECharts option={option} style={typeof style !== 'undefined' ? style : { height: 320, width: '100%' }} />
     </div>
   );
 }

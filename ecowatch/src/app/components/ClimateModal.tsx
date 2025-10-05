@@ -16,6 +16,21 @@ interface ClimateModalProps {
 export default function ClimateModal({ open, onClose, lat, lng, regionName, meteoData }: ClimateModalProps) {
   if (!open) return null;
 
+  // Função para extrair nome e unidade do parâmetro
+  function parseParameter(param: string) {
+    // Exemplo: "t_2m:C" => { name: "Temperatura 2m", unit: "°C" }
+    const [name, unit] = param.split(":");
+    let displayName = name;
+    if (name === "t_2m") displayName = "Temperatura 2m";
+    else if (name === "absolute_humidity_2m") displayName = "Umidade Absoluta 2m";
+    else if (name === "wind_speed_2m") displayName = "Vento 2m";
+    else if (name === "precip_1h") displayName = "Precipitação 1h";
+    else if (name === "global_rad") displayName = "Radiação Global";
+    else if (name === "drought_index") displayName = "Índice de Seca";
+    else displayName = name;
+    return { displayName, unit };
+  }
+
   return (
     <div style={{
       position: "fixed",
@@ -34,10 +49,12 @@ export default function ClimateModal({ open, onClose, lat, lng, regionName, mete
         borderRadius: 22,
         boxShadow: "0 0 48px #00ffe0",
         padding: 48,
-        minWidth: 700,
-        maxWidth: 900,
+        minWidth: 1200,
+        maxWidth: 1600,
         color: "#eafcff",
-        position: "relative"
+        position: "relative",
+        maxHeight: "95vh",
+        overflowY: "auto"
       }}>
         <button onClick={onClose} style={{
           position: "absolute",
@@ -63,13 +80,23 @@ export default function ClimateModal({ open, onClose, lat, lng, regionName, mete
           />
         </div>
         <div style={{marginBottom: 10, fontWeight: 600}}>Dados Climáticos:</div>
-        {meteoData && meteoData.data && meteoData.data[0] && meteoData.data[0].coordinates && meteoData.data[0].coordinates[0] ? (
-          <>
-            <React.Suspense fallback={<div>Carregando gráfico...</div>}>
-              <ClimateChart dates={meteoData.data[0].coordinates[0].dates} />
-            </React.Suspense>
-            
-          </>
+        {meteoData && meteoData.data && meteoData.data.length > 0 ? (
+          <div style={{display: "flex", flexWrap: "wrap", gap: "32px", justifyContent: "center", marginTop: 24}}>
+            {meteoData.data.map((paramObj: any, idx: number) => {
+              const { displayName, unit } = parseParameter(paramObj.parameter);
+              const dates = paramObj.coordinates[0]?.dates || [];
+              return (
+                <div key={paramObj.parameter} style={{flex: "1 1 400px", minWidth: 400, maxWidth: 500, background: "#14233a", borderRadius: 12, padding: 18, boxShadow: "0 0 12px #00ffe0", display: "flex", flexDirection: "column", alignItems: "stretch", height: 420}}>
+                  <div style={{fontSize: "1.2em", color: "#2fffd6", marginBottom: 6, textAlign: "center"}}>{displayName} <span style={{color: "#eafcff", fontSize: "0.9em"}}>({unit})</span></div>
+                  <div style={{flex: 1, display: "flex"}}>
+                    <React.Suspense fallback={<div>Carregando gráfico...</div>}>
+                      <ClimateChart dates={dates} title={displayName} unit={unit} style={{height: "100%", width: "100%"}} />
+                    </React.Suspense>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         ) : (
           <div style={{color: '#ff4f4f'}}>Dados não disponíveis no momento.</div>
         )}

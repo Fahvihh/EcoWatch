@@ -30,50 +30,58 @@ export default function Home() {
   }
 
   return (
-  <div className="min-h-screen bg-cover bg-center" style={{backgroundColor: '#061826'}}>
-      
-
-      {/* Main Content */}
-  <main className="main-content" style={{marginTop: '40px'}}>
-        
-
-        <section className="right-column" style={{
-          minWidth: '900px',
+    <div className="min-h-screen bg-cover bg-center" style={{backgroundColor: '#061826'}}>
+      {/* Header Navigation */}
+      <header style={{
+        width: '100%',
+        background: 'rgba(10,30,50,0.85)',
+        borderBottom: '1.5px solid #2fffd6',
+        boxShadow: '0 2px 16px #00ffe033',
+        padding: '0.5em 0',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: 2000
+      }}>
+        <nav style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          position: 'relative',
-          height: '750px',
-          overflow: 'visible',
+          gap: '32px',
+          fontSize: '1.15em',
+          fontWeight: 500
         }}>
-          <GlobeBrazil onRegionClick={handleRegionClick} />
-          <ClimateModal
-            open={modalOpen}
-            onClose={() => setModalOpen(false)}
-            lat={modalLat}
-            lng={modalLng}
-            regionName={selectedRegion}
-            meteoData={meteoData}
-          />
-      
-        </section>
-      </main>
+          <a href="/" style={{
+            color: '#2fffd6',
+            textDecoration: 'none',
+            padding: '8px 18px',
+            borderRadius: '8px',
+            transition: 'background 0.2s',
+            background: 'transparent'
+          }}>Home</a>
+          <a href="/quem-somos" style={{
+            color: '#eafcff',
+            textDecoration: 'none',
+            padding: '8px 18px',
+            borderRadius: '8px',
+            transition: 'background 0.2s',
+            background: 'transparent'
+          }}>Quem Somos</a>
+        </nav>
+      </header>
 
-      {/* Footer */}
-      <footer style={{
-        textAlign: 'center',
-        padding: '25px',
-        background: 'rgba(10,50,80,0.95)',
-        fontSize: '1.1em',
-        color: '#2fffd6',
-        position: 'relative',
-        zIndex: 5,
-        borderTop: '2px solid #2fffd6',
-        marginTop: '40px',
-        letterSpacing: '1px',
-      }}>
-        <p>2025 NASA Space Apps Challenge</p>
-      </footer>
+      {/* Main Content */}
+      <main style={{marginTop: '80px'}}>
+            <GlobeBrazil onRegionClick={handleRegionClick} />
+            <ClimateModal
+              open={modalOpen}
+              onClose={() => setModalOpen(false)}
+              lat={modalLat}
+              lng={modalLng}
+              regionName={selectedRegion}
+              meteoData={meteoData}
+            />
+      </main>
     </div>
   );
 }
