@@ -1,24 +1,50 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
 
-First, run the development server:
+## Como instalar e rodar o EcoWatch
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Pré-requisitos
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Node.js (recomendado v18 ou superior)
+- npm (instalado junto com Node.js)
+- Git (opcional, para clonar o repositório)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Passos para instalar
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Clone o repositório (opcional):**
+	```bash
+	git clone https://github.com/Jcmaster2000/EcoWatch.git
+	cd EcoWatch/ecowatch
+	```
+
+2. **Instale as dependências:**
+	```bash
+	npm install
+	```
+
+3. **Configure variáveis de ambiente (se necessário):**
+	- Crie um arquivo `.env.local` na raiz do projeto e adicione suas chaves de API, se houver.
+
+4. **Inicie o servidor de desenvolvimento:**
+	```bash
+	npm run dev
+	```
+
+5. **Acesse o sistema:**
+	- Abra o navegador e acesse [http://localhost:3000](http://localhost:3000)
+
+### Estrutura do Projeto
+
+- `src/app/` — Código principal do frontend (Next.js)
+- `public/` — Imagens e arquivos estáticos
+- `package.json` — Dependências e scripts
+- `README.md` — Documentação do projeto
+
+### Comandos Úteis
+
+- `npm run dev` — Inicia o servidor de desenvolvimento
+- `npm run build` — Gera a versão de produção
+- `npm start` — Inicia o servidor em modo produção após o build
 
 ## Learn More
 
